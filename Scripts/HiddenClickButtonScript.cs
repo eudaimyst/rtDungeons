@@ -8,10 +8,11 @@ public class HiddenClickButtonScript : MonoBehaviour, IPointerDownHandler, IPoin
 
     GameManager gameManager;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-	}
+    }
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -49,9 +50,10 @@ public class HiddenClickButtonScript : MonoBehaviour, IPointerDownHandler, IPoin
     public void OnPointerClick(PointerEventData eventData)
     {
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 }
