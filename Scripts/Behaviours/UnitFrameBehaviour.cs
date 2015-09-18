@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
-public class UnitFrameBehaviour : MonoBehaviour {
+public class UnitFrameBehaviour : MonoBehaviour, IPointerDownHandler
+{
 
     GameManager gameManager;
 
@@ -34,6 +36,19 @@ public class UnitFrameBehaviour : MonoBehaviour {
                 selectionOutline.SetActive(false);
             }
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (gameManager.keyboardManager.altModifier) gameManager.ClearIfSelected(linkedUnit);
+        if (gameManager.keyboardManager.shiftModifier) gameManager.SetSelectedUnit(linkedUnit);
+        if (!gameManager.keyboardManager.altModifier && !gameManager.keyboardManager.shiftModifier)
+        {
+            Debug.Log("no modifier and clicked frame");
+            gameManager.ClearSelection();
+            gameManager.SetSelectedUnit(linkedUnit);
+        }
+
     }
 
     public void LinkUnit(UnitBehaviour unit) //called by interfaceManager when frame is spawned
