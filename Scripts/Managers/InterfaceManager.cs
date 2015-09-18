@@ -11,6 +11,8 @@ public class InterfaceManager : MonoBehaviour {
 
     GameManager gameManager;
 
+    public UnitFrameBehaviour unitFrame; //set in inspector, this is the unit frame game object to spawn
+
     // Use this for initialization
     void Start()
     {
@@ -32,7 +34,6 @@ public class InterfaceManager : MonoBehaviour {
         {
             UpdateSelectionBox();
         }
-
     }
 
     // FPS Calculation variables
@@ -227,6 +228,27 @@ public class InterfaceManager : MonoBehaviour {
                 }
             }
 
+        }
+
+    }
+
+    public void SpawnUnitFrame(UnitBehaviour unit) //called by game manager when a friendly unit is spawned (must be after ID is set)
+    {
+        if (unitFrame == null)
+        {
+            Debug.LogError("error! cant spawn unit frame because it wasnt set in the inspector");
+        }
+        else
+        {
+            GameObject spawnedFrame = GameObject.Instantiate(unitFrame.gameObject);
+            spawnedFrame.GetComponent<UnitFrameBehaviour>().LinkUnit(unit);
+
+            spawnedFrame.transform.SetParent(GameObject.Find("UnitFrameParent").transform); //set the parent to the UI parent object
+
+            //move and scale
+            spawnedFrame.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(0, (unit.ID)*-(spawnedFrame.GetComponent<RectTransform>().rect.height), 0);
+            spawnedFrame.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+            Debug.Log("unit frame spawned");
         }
 
     }

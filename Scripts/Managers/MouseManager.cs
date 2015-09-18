@@ -45,7 +45,7 @@ public class MouseManager : MonoBehaviour {
             gameManager.cameraManager.MoveCamera(Vector3.right);
             //Debug.Log("move screen right");
         }
-        if (mouseScreenPosition.y >= Screen.height)
+        if (mouseScreenPosition.y >= Screen.height-1)
         {
             gameManager.cameraManager.MoveCamera(Vector3.forward);
             //Debug.Log("move screen up");

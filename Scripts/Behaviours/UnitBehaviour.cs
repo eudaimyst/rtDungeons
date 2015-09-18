@@ -33,19 +33,21 @@ public class UnitBehaviour : MonoBehaviour {
             health = 100;
             power = 100;
 
-            strength = 100;
-            armour = 100;
-            agility = 100;
-            dexterity = 100;
-            spirit = 100;
-            intellect = 100;
+            strength = 10;
+            armour = 10;
+            agility = 10;
+            dexterity = 10;
+            spirit = 10;
+            intellect = 10;
         }
     }
-
     public Attributes attributes = new Attributes();
 
-	// Use this for initialization
-	void Start () {
+    public int ID; //ID is the position of the unit in gameManagers List of All units.
+
+
+    // Use this for initialization
+    void Start () {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         gameManager.RegisterUnit(this.gameObject.GetComponent<UnitBehaviour>());
@@ -59,7 +61,6 @@ public class UnitBehaviour : MonoBehaviour {
         unitSelectIndicator.SetActive(false);
 
         attributes.RollStats();
-
         Debug.Log("attributes rolled, health: " + attributes.health);
 	}
 	

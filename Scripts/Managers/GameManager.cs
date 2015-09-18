@@ -27,10 +27,11 @@ public class GameManager : MonoBehaviour {
     public List<UnitBehaviour> listOfSelectedUnits = new List<UnitBehaviour>();
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
+        interfaceManager = this.GetComponent<InterfaceManager>();
         mouseManager = this.GetComponent<MouseManager>();
         cameraManager = this.GetComponent<CameraManager>();
-        interfaceManager = this.GetComponent<InterfaceManager>();
         keyboardManager = this.GetComponent<KeyboardManager>();
 
 	}
@@ -44,8 +45,17 @@ public class GameManager : MonoBehaviour {
     public void RegisterUnit(UnitBehaviour unit)
     {
         listOfAllUnits.Add(unit);
+        unit.ID = listOfAllUnits.IndexOf(unit);
         if (unit.unitType == UnitBehaviour.UnitTypeEnum.enemy) listOfEnemyUnits.Add(unit);
-        if (unit.unitType == UnitBehaviour.UnitTypeEnum.friendly) listOfFriendlyUnits.Add(unit);
+        if (unit.unitType == UnitBehaviour.UnitTypeEnum.friendly)
+        {
+            listOfFriendlyUnits.Add(unit);
+            if (interfaceManager == null)
+            {
+                interfaceManager = this.GetComponent<InterfaceManager>();
+            }
+            interfaceManager.SpawnUnitFrame(unit);
+        }
     }
 
     public void TrueSelectUnit(UnitBehaviour unit) //this is not called yet
