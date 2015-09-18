@@ -10,7 +10,9 @@ public class GameManager : MonoBehaviour {
     public CameraManager cameraManager;
     [HideInInspector]
     public InterfaceManager interfaceManager;
-    
+    [HideInInspector]
+    public KeyboardManager keyboardManager;
+
     [HideInInspector]
     public UnitBehaviour trueSelectedUnit; //the true selected is one out of any number of selected units that is shown in the HUD and who is primarily controlled
 
@@ -29,7 +31,7 @@ public class GameManager : MonoBehaviour {
         mouseManager = this.GetComponent<MouseManager>();
         cameraManager = this.GetComponent<CameraManager>();
         interfaceManager = this.GetComponent<InterfaceManager>();
-
+        keyboardManager = this.GetComponent<KeyboardManager>();
 
 	}
 	

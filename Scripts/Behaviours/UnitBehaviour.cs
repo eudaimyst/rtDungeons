@@ -12,6 +12,38 @@ public class UnitBehaviour : MonoBehaviour {
     public enum UnitTypeEnum { friendly, enemy };
     public UnitTypeEnum unitType;
 
+    public class Attributes
+    {
+        public string name;
+
+        public int health;
+        public int power;
+
+        public int strength;
+        public int armour;
+        public int agility;
+        public int dexterity;
+        public int spirit;
+        public int intellect;
+
+        public void RollStats()
+        {
+            name = "defaultName";
+
+            health = 100;
+            power = 100;
+
+            strength = 100;
+            armour = 100;
+            agility = 100;
+            dexterity = 100;
+            spirit = 100;
+            intellect = 100;
+        }
+    }
+
+    public Attributes attributes = new Attributes();
+
 	// Use this for initialization
 	void Start () {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
@@ -25,6 +57,10 @@ public class UnitBehaviour : MonoBehaviour {
         }
 
         unitSelectIndicator.SetActive(false);
+
+        attributes.RollStats();
+
+        Debug.Log("attributes rolled, health: " + attributes.health);
 	}
 	
 	// Update is called once per frame

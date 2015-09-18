@@ -127,12 +127,17 @@ public class InterfaceManager : MonoBehaviour {
             if (hitObject.layer == LayerMask.NameToLayer("Unit"))
             {
                 UnitBehaviour hitUnit = hitObject.GetComponent<UnitBehaviour>();
-                gameManager.ClearSelection();
-                gameManager.SetSelectedUnit(hitUnit);
+                if (!gameManager.keyboardManager.shiftModifier && !gameManager.keyboardManager.altModifier) gameManager.ClearSelection(); //only clear selection if shift or alt isn't pressed
+                if (gameManager.keyboardManager.altModifier) gameManager.ClearIfSelected(hitUnit); //deselct if alt
+                else gameManager.SetSelectedUnit(hitUnit);
             }
             else
             {
-                gameManager.ClearSelection();
+                if (!gameManager.keyboardManager.shiftModifier && !gameManager.keyboardManager.altModifier) //only clear selection if shift or alt isn't pressed
+                {
+                    Debug.Log("clearing selection");
+                    gameManager.ClearSelection();
+                }
             }
 
         } else
@@ -148,7 +153,7 @@ public class InterfaceManager : MonoBehaviour {
         {
             Vector2 unitPosition = gameManager.cameraManager.gameCamera.WorldToScreenPoint(gameManager.listOfFriendlyUnits[i].transform.position);
 
-            bool selected = false; //just a temp bool used to determine if the unit isnt within the box to clear the selection at the end
+            bool selected = false; //just a temp bool used to determine if the unit is within the box
 
             if (selectionBoxOffSet.x < 0 || selectionBoxOffSet.y < 0) //use the variables from drawing the box to determine if box is inverted
             {
@@ -161,7 +166,6 @@ public class InterfaceManager : MonoBehaviour {
                         if (unitPosition.y > startPosition.y && unitPosition.y < endPosition.y)
                         {
                             //Debug.Log("unit at " + unitPosition + " is between start at " + startPosition + " and end at " + endPosition);
-                            gameManager.SetSelectedUnit(gameManager.listOfFriendlyUnits[i]); //FINALLY SELECT THE UNIT
                             selected = true;
                         }
                     }
@@ -174,7 +178,6 @@ public class InterfaceManager : MonoBehaviour {
                         if (unitPosition.y < startPosition.y && unitPosition.y > endPosition.y)
                         {
                             //Debug.Log("unit at " + unitPosition + " is between start at " + startPosition + " and end at " + endPosition);
-                            gameManager.SetSelectedUnit(gameManager.listOfFriendlyUnits[i]); //FINALLY SELECT THE UNIT
                             selected = true;
                         }
                     }
@@ -187,7 +190,6 @@ public class InterfaceManager : MonoBehaviour {
                         if (unitPosition.y < startPosition.y && unitPosition.y > endPosition.y)
                         {
                             //Debug.Log("unit at " + unitPosition + " is between start at " + startPosition + " and end at " + endPosition);
-                            gameManager.SetSelectedUnit(gameManager.listOfFriendlyUnits[i]); //FINALLY SELECT THE UNIT
                             selected = true;
                         }
                     }
@@ -201,15 +203,28 @@ public class InterfaceManager : MonoBehaviour {
                     {
                         //Debug.Log("regular selection");
                         //Debug.Log("unit at " + unitPosition + " is between start at " + startPosition + " and end at " + endPosition);
-                        gameManager.SetSelectedUnit(gameManager.listOfFriendlyUnits[i]); //FINALLY SELECT THE UNIT
                         selected = true;
                     }
                 }
             }
 
-            if (!selected)
+            if (selected)
             {
-                gameManager.ClearIfSelected(gameManager.listOfFriendlyUnits[i]);
+                if (!gameManager.keyboardManager.altModifier) //if alt isn't pressed
+                {
+                    gameManager.SetSelectedUnit(gameManager.listOfFriendlyUnits[i]); //FINALLY SELECT THE UNIT
+                }
+                else
+                {
+                    gameManager.ClearIfSelected(gameManager.listOfFriendlyUnits[i]);
+                }
+            }
+            else //unit were up to in the list isn't in the selection box
+            {
+                if (!gameManager.keyboardManager.shiftModifier && !gameManager.keyboardManager.altModifier) //only clear the unit from selection if shift or alt isnt held (effectively adding the selected unit to the currently selected)
+                {
+                    gameManager.ClearIfSelected(gameManager.listOfFriendlyUnits[i]);
+                }
             }
 
         }
