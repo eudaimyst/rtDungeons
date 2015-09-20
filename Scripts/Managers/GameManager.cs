@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour {
         trueSelectedUnit = unit;
     }
 
-    public void SetSelectedUnit(UnitBehaviour unit)
+    public void SetSelectedUnit(UnitBehaviour unit) //set a unit as selected
     {
         bool alreadyInList = false;
         for (var i = 0; i < listOfSelectedUnits.Count; i++)
@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour {
         listOfSelectedUnits.Clear();
     }
 
-    public void ClearIfSelected(UnitBehaviour unit) //clears selection ONLY if a specific unit is selected
+    public void ClearIfSelected(UnitBehaviour unit) //clears selection only if a SPECIFIC unit is selected
     {
         for (var i = 0; i < listOfSelectedUnits.Count; i++)
         {

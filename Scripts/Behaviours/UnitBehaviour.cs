@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class UnitBehaviour : MonoBehaviour {
 
     GameManager gameManager;
 
     public GameObject unitSelectIndicator;
+
+    public GameObject moveTargetIndicator;
+
+    [HideInInspector]
+    public GameObject unitParent;
 
     bool isSelected;
 
@@ -45,18 +51,17 @@ public class UnitBehaviour : MonoBehaviour {
 
     public int ID; //ID is the position of the unit in gameManagers List of All units.
 
+    public List<GameObject> moveOrderList = new List<GameObject>();
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
         gameManager.RegisterUnit(this.gameObject.GetComponent<UnitBehaviour>());
 
-        if (unitSelectIndicator == null)
-        {
-            Debug.Log("no unit select indicator for unit with name: " + name);
-            Debug.Log("make sure to set the select indicator in unit prefab");
-        }
+        if (unitSelectIndicator == null) Debug.LogError("no unitSelectIndicator, make sure to set the select indicator from the unit game object in unit prefab");
+        if (moveTargetIndicator == null) Debug.LogError("no moveTargetIndicator, make sure to set the moveTargetIndicator in inspector");
 
         unitSelectIndicator.SetActive(false);
 
@@ -66,7 +71,6 @@ public class UnitBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
         //show/hide the select indicator
         if (isSelected && !unitSelectIndicator.activeInHierarchy)
         {
@@ -77,6 +81,18 @@ public class UnitBehaviour : MonoBehaviour {
             unitSelectIndicator.SetActive(false);
         }
 
+        if (moveOrderList.Count > 0) //if has move order
+        {
+            transform.LookAt(moveOrderList[0].transform, Vector3.up); //look at most first move order (if many are queued)
+
+            transform.position = Vector3.MoveTowards(transform.position, moveOrderList[0].transform.position, Time.deltaTime * 1); //move towards
+
+            if (transform.position == moveOrderList[0].transform.position)
+            {
+                GameObject.Destroy(moveOrderList[0]);
+                moveOrderList.RemoveAt(0);
+            }
+        }
     }
 
     public void SetSelected(bool b)
@@ -103,6 +119,27 @@ public class UnitBehaviour : MonoBehaviour {
     public void onCollision(Collision col)
     {
         Debug.Log(name + " colliding with " + col.gameObject.name);
+    }
+
+    public void GiveMoveOrder(Vector3 location, bool queued) //called by interface manager on all selected units
+    {
+        GameObject moveTargetTemp;
+        moveTargetTemp = GameObject.Instantiate(moveTargetIndicator);
+        //moveTargetTemp.transform.SetParent(this.transform);
+        moveTargetTemp.transform.position = (location + new Vector3 (0, .01f, 0));
+
+        Debug.Log("Move order given at " + location.ToString());
+        if (queued)
+        {
+            moveOrderList.Add(moveTargetTemp);
+        }
+        else
+        {
+            for (var i = 0; i < moveOrderList.Count; i++) GameObject.Destroy(moveOrderList[i]);
+            moveOrderList.Clear();
+            moveOrderList.Add(moveTargetTemp);
+        }
+
     }
 
 }

@@ -63,12 +63,12 @@ public class MouseManager : MonoBehaviour {
         if (pressed)
         {
             Debug.Log("L Pressed");
-            gameManager.interfaceManager.StartSelect();
+            gameManager.interfaceManager.LeftMousePressed();
         }
         else
         {
             Debug.Log("L Released");
-            gameManager.interfaceManager.EndSelect();
+            gameManager.interfaceManager.LeftMouseReleased();
         }
     }
 
@@ -78,11 +78,13 @@ public class MouseManager : MonoBehaviour {
         {
             Debug.Log("R Pressed");
             gameManager.cameraManager.SetRotating(true);
+            gameManager.interfaceManager.RightMousePressed();
         }
         else
         {
             Debug.Log("R Released");
             gameManager.cameraManager.SetRotating(false);
+            gameManager.interfaceManager.RightMouseReleased();
         }
     }
 }

@@ -65,8 +65,8 @@ public class InterfaceManager : MonoBehaviour {
 
     bool selectionStarted;
 
-    //called by mouse manager on left click down
-    public void StartSelect()
+    //next 4 functions called by mouse manager
+    public void LeftMousePressed()
     {
         selectStartLocation = new Vector2(0, 0);
         selectEndLocation = new Vector2(0, 0);
@@ -78,9 +78,7 @@ public class InterfaceManager : MonoBehaviour {
         selectStartLocation = gameManager.mouseManager.mouseScreenPosition;
         selectionBoxRect.anchoredPosition = selectStartLocation;
     }
-
-    //called by mouse manager on left click up
-    public void EndSelect()
+    public void LeftMouseReleased()
     {
         selectEndLocation = gameManager.mouseManager.mouseScreenPosition;
         selectionBox.SetActive(false);
@@ -88,6 +86,61 @@ public class InterfaceManager : MonoBehaviour {
         if (selectStartLocation == selectEndLocation) PointSelect(); 
         else BoxSelect(selectStartLocation, selectEndLocation);
     }
+    public void RightMousePressed()
+    {
+
+        if (gameManager.listOfSelectedUnits.Count > 0) //if a unit is selected
+
+        {
+
+            RaycastHit r; //the output of the raycast
+            GameObject hitObject;
+
+            if (Physics.Raycast(gameManager.cameraManager.gameCamera.ScreenPointToRay(selectEndLocation), out r)) //cast a ray
+            {
+                hitObject = r.collider.gameObject;
+                Debug.Log("RaycastHit hit something with name: " + hitObject.name);
+
+                if (hitObject.layer == LayerMask.NameToLayer("Unit"))
+                {
+                    //we hit a unit
+                }
+                else if (hitObject.layer == LayerMask.NameToLayer("Ground"))
+                {
+                    //we hit the ground
+                    for (var i = 0; i < gameManager.listOfSelectedUnits.Count; i++)
+                    {
+
+                        if (gameManager.keyboardManager.shiftModifier)
+                        {
+                            gameManager.listOfSelectedUnits[i].GiveMoveOrder(r.point, true);  //give a move order to each selected unit
+                        }
+                        else
+                        {
+                            gameManager.listOfSelectedUnits[i].GiveMoveOrder(r.point, false);
+                        }
+
+                    }
+                }
+                else
+                {
+                    //we hit neither unit nor ground
+                }
+            }
+            else
+            {
+                Debug.LogError("raycast on right click in interface manager did not return a ray");
+            }
+
+        }
+
+
+    }
+    public void RightMouseReleased()
+    {
+
+    }
+
     //called during selection
     void UpdateSelectionBox()
     {
