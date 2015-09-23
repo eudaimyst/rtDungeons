@@ -26,7 +26,7 @@ public class HiddenClickButtonScript : MonoBehaviour, IPointerDownHandler, IPoin
         }
         else if (eventData.button == PointerEventData.InputButton.Middle)
         {
-            Debug.Log("Middle click, does nothing");
+            gameManager.mouseManager.MiddleClick(true);
         }
     }
 
@@ -42,7 +42,7 @@ public class HiddenClickButtonScript : MonoBehaviour, IPointerDownHandler, IPoin
         }
         else if (eventData.button == PointerEventData.InputButton.Middle)
         {
-            Debug.Log("Middle click, does nothing");
+            gameManager.mouseManager.MiddleClick(false);
         }
     }
 

@@ -77,14 +77,26 @@ public class MouseManager : MonoBehaviour {
         if (pressed)
         {
             Debug.Log("R Pressed");
-            gameManager.cameraManager.SetRotating(true);
             gameManager.interfaceManager.RightMousePressed();
         }
         else
         {
             Debug.Log("R Released");
-            gameManager.cameraManager.SetRotating(false);
             gameManager.interfaceManager.RightMouseReleased();
+        }
+    }
+
+    public void MiddleClick(bool pressed)
+    {
+        if (pressed)
+        {
+            Debug.Log("M Pressed");
+            gameManager.cameraManager.SetRotating(true);
+        }
+        else
+        {
+            Debug.Log("M Released");
+            gameManager.cameraManager.SetRotating(false);
         }
     }
 }

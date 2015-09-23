@@ -12,6 +12,7 @@ public class InterfaceManager : MonoBehaviour {
     GameManager gameManager;
 
     public UnitFrameBehaviour unitFrame; //set in inspector, this is the unit frame game object to spawn
+    public AbilitySlotBehaviour abilitySlot; //set in inspector, this is the unit frame game object to spawn
 
     // Use this for initialization
     void Start()
@@ -23,6 +24,33 @@ public class InterfaceManager : MonoBehaviour {
         selectionBoxRect = selectionBox.GetComponent<RectTransform>();
 
         fpsText = GameObject.Find("FPSValue").GetComponent<Text>();
+
+        SpawnAbilitySlots();
+    }
+
+    void SpawnAbilitySlots() //called on Start
+    {
+        if (abilitySlot == null)
+        {
+            Debug.LogError("error! cant abilitySlot because it wasnt set in the inspector");
+        }
+        else
+        {
+            for (var i = 0; i < 6; i++)
+            {
+
+                GameObject spawnedSlot = GameObject.Instantiate(abilitySlot.gameObject);
+
+                spawnedSlot.transform.SetParent(GameObject.Find("AbilityBar").transform); //set the parent to the UI parent object
+
+                //move and scale
+                spawnedSlot.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(i * (spawnedSlot.GetComponent<RectTransform>().rect.width), 0, 0);
+                spawnedSlot.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+                
+                Debug.Log("abilitySlot spawned");
+                
+            }
+        }
     }
 
     // Update is called once per frame
@@ -183,7 +211,11 @@ public class InterfaceManager : MonoBehaviour {
                 UnitBehaviour hitUnit = hitObject.GetComponent<UnitBehaviour>();
                 if (!gameManager.keyboardManager.shiftModifier && !gameManager.keyboardManager.altModifier) gameManager.ClearSelection(); //only clear selection if shift or alt isn't pressed
                 if (gameManager.keyboardManager.altModifier) gameManager.ClearIfSelected(hitUnit); //deselct if alt
-                else gameManager.SetSelectedUnit(hitUnit);
+                else
+                {
+                    gameManager.SetSelectedUnit(hitUnit);
+                    gameManager.TrueSelectUnit(hitUnit);
+                }
             }
             else
             {
@@ -305,4 +337,5 @@ public class InterfaceManager : MonoBehaviour {
         }
 
     }
+
 }

@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public KeyboardManager keyboardManager;
 
-    [HideInInspector]
+    //[HideInInspector]
     public UnitBehaviour trueSelectedUnit; //the true selected is one out of any number of selected units that is shown in the HUD and who is primarily controlled
 
     //[HideInInspector]
@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour {
     public void TrueSelectUnit(UnitBehaviour unit) //this is not called yet
     {
         trueSelectedUnit = unit;
+        Debug.Log("setting trueSelectedUnit");
     }
 
     public void SetSelectedUnit(UnitBehaviour unit) //set a unit as selected
@@ -84,6 +85,7 @@ public class GameManager : MonoBehaviour {
             listOfSelectedUnits[i].SetSelected(false);
         }
         listOfSelectedUnits.Clear();
+        trueSelectedUnit = null;
     }
 
     public void ClearIfSelected(UnitBehaviour unit) //clears selection only if a SPECIFIC unit is selected
