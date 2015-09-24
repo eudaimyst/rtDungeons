@@ -14,6 +14,9 @@ public class InterfaceManager : MonoBehaviour {
     public UnitFrameBehaviour unitFrame; //set in inspector, this is the unit frame game object to spawn
     public AbilitySlotBehaviour abilitySlot; //set in inspector, this is the unit frame game object to spawn
 
+    [HideInInspector]
+    public AbilitySlotBehaviour[] abilitySlots = new AbilitySlotBehaviour[6];
+
     // Use this for initialization
     void Start()
     {
@@ -40,6 +43,9 @@ public class InterfaceManager : MonoBehaviour {
             {
 
                 GameObject spawnedSlot = GameObject.Instantiate(abilitySlot.gameObject);
+                AbilitySlotBehaviour abilitySlotBehaviour = spawnedSlot.GetComponent<AbilitySlotBehaviour>();
+                abilitySlotBehaviour.index = i;
+                abilitySlots[i] = abilitySlotBehaviour;
 
                 spawnedSlot.transform.SetParent(GameObject.Find("AbilityBar").transform); //set the parent to the UI parent object
 
@@ -214,7 +220,6 @@ public class InterfaceManager : MonoBehaviour {
                 else
                 {
                     gameManager.SetSelectedUnit(hitUnit);
-                    gameManager.TrueSelectUnit(hitUnit);
                 }
             }
             else

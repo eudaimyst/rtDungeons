@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour {
     public InterfaceManager interfaceManager;
     [HideInInspector]
     public KeyboardManager keyboardManager;
+    [HideInInspector]
+    public AbilityManager abilityManager;
 
     //[HideInInspector]
     public UnitBehaviour trueSelectedUnit; //the true selected is one out of any number of selected units that is shown in the HUD and who is primarily controlled
@@ -33,6 +35,7 @@ public class GameManager : MonoBehaviour {
         mouseManager = this.GetComponent<MouseManager>();
         cameraManager = this.GetComponent<CameraManager>();
         keyboardManager = this.GetComponent<KeyboardManager>();
+        abilityManager = this.GetComponent<AbilityManager>();
 
 	}
 	
@@ -58,10 +61,11 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void TrueSelectUnit(UnitBehaviour unit) //this is not called yet
+    public void TrueSelectUnit(UnitBehaviour unit)
     {
         trueSelectedUnit = unit;
         Debug.Log("setting trueSelectedUnit");
+        unit.SetTrueSelected(true);
     }
 
     public void SetSelectedUnit(UnitBehaviour unit) //set a unit as selected
@@ -76,6 +80,10 @@ public class GameManager : MonoBehaviour {
         }
         if (!alreadyInList) listOfSelectedUnits.Add(unit); //dont add it to the list if it's already in the list
         unit.SetSelected(true);
+        if (trueSelectedUnit == null)
+        {
+            TrueSelectUnit(unit);
+        }
     }
 
     public void ClearSelection() //clears entire selection regardless of whether a specific unit is selected
@@ -85,7 +93,12 @@ public class GameManager : MonoBehaviour {
             listOfSelectedUnits[i].SetSelected(false);
         }
         listOfSelectedUnits.Clear();
-        trueSelectedUnit = null;
+
+        if (trueSelectedUnit != null)
+        {
+            trueSelectedUnit.SetTrueSelected(false);
+            trueSelectedUnit = null;
+        }
     }
 
     public void ClearIfSelected(UnitBehaviour unit) //clears selection only if a SPECIFIC unit is selected
@@ -98,7 +111,11 @@ public class GameManager : MonoBehaviour {
                 listOfSelectedUnits.RemoveAt(i);
             }
         }
-        
+        if (trueSelectedUnit == unit)
+        {
+            trueSelectedUnit.SetTrueSelected(false);
+            trueSelectedUnit = null;
+        }
     }
 
 

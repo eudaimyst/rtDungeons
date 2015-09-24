@@ -14,6 +14,7 @@ public class UnitBehaviour : MonoBehaviour {
     public GameObject unitParent;
 
     bool isSelected;
+    //bool isTrueSelected; commenting out because we can just check against gameManager
 
     public enum UnitTypeEnum { friendly, enemy };
     public UnitTypeEnum unitType;
@@ -49,6 +50,8 @@ public class UnitBehaviour : MonoBehaviour {
     }
     public Attributes attributes = new Attributes();
 
+    public AbilityManager.BaseAbility[] abilities = new AbilityManager.BaseAbility[6];
+
     public int ID; //ID is the position of the unit in gameManagers List of All units.
 
     public List<GameObject> moveOrderList = new List<GameObject>();
@@ -67,6 +70,11 @@ public class UnitBehaviour : MonoBehaviour {
 
         attributes.RollStats();
         Debug.Log("attributes rolled, health: " + attributes.health);
+
+        for (var i = 0; i < 6; i++)
+        {
+            abilities[i] = gameManager.abilityManager.abilityList[0];
+        }
 	}
 	
 	// Update is called once per frame
@@ -99,6 +107,19 @@ public class UnitBehaviour : MonoBehaviour {
     {
         Debug.Log("setting " + this.name + " selected " + b);
         isSelected = b;
+    }
+
+    public void SetTrueSelected(bool b)
+    {
+        Debug.Log("setting " + this.name + " trueSelected " + b);
+        //isTrueSelected = b; commenting out because we can just check against gameManager
+        if (b)
+        {
+            unitSelectIndicator.GetComponent<MeshRenderer>().material.color = Color.yellow;
+        } else
+        {
+            unitSelectIndicator.GetComponent<MeshRenderer>().material.color = Color.white;
+        }
     }
 
     public bool GetSelected()
