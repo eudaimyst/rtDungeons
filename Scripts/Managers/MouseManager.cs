@@ -19,7 +19,8 @@ public class MouseManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Debug.Log(mouseScreenPosition.ToString());
+        //Debug.Log(mouseScreenPosition.ToString());
+        
         //store the position of the mouse in screen co-ordinates 0, 0 = bottom left
         var mouseScreenPositionOld = mouseScreenPosition;
 
