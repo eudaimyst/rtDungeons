@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour {
     {
         trueSelectedUnit = unit;
         Debug.Log("setting trueSelectedUnit");
-        unit.SetTrueSelected(true);
+        unit.SetTrueSelected(); //refresh ability slots and select indicator
     }
 
     public void SetSelectedUnit(UnitBehaviour unit) //set a unit as selected
@@ -80,9 +80,10 @@ public class GameManager : MonoBehaviour {
         }
         if (!alreadyInList) listOfSelectedUnits.Add(unit); //dont add it to the list if it's already in the list
         unit.SetSelected(true);
-        if (trueSelectedUnit == null)
+
+        if (listOfSelectedUnits.Count == 1) //dont true select the unit if theres more than one unit selected, ie, selected multiple units or used shift+select
         {
-            TrueSelectUnit(unit);
+            TrueSelectUnit(listOfSelectedUnits[0]);
         }
     }
 
@@ -96,7 +97,7 @@ public class GameManager : MonoBehaviour {
 
         if (trueSelectedUnit != null)
         {
-            trueSelectedUnit.SetTrueSelected(false);
+            trueSelectedUnit.SetTrueSelected(); //refresh ability slots and select indicator
             trueSelectedUnit = null;
         }
     }
@@ -109,13 +110,44 @@ public class GameManager : MonoBehaviour {
             {
                 unit.SetSelected(false);
                 listOfSelectedUnits.RemoveAt(i);
+                trueSelectedUnit.SetTrueSelected();
             }
         }
         if (trueSelectedUnit == unit)
         {
-            trueSelectedUnit.SetTrueSelected(false);
-            trueSelectedUnit = null;
+            trueSelectedUnit.SetTrueSelected(); //refresh ability slots and select indicator
+            //trueSelectedUnit = null;
+            TabTrueSelected();
         }
+        
+        
+    }
+
+    public void TabTrueSelected() //set the true selected unit to be the "next" selected unit out of the currently selected units
+    {
+        Debug.Log("tab true select");
+
+        if (listOfSelectedUnits.Count == 0)
+        {
+            trueSelectedUnit = null;
+            return;
+        }
+
+        if (trueSelectedUnit == null && listOfSelectedUnits.Count == 1) TrueSelectUnit(listOfSelectedUnits[0]); //if true selected unit isn't set and there's only 1 unit in current selection
+
+        if (trueSelectedUnit != null)
+        {
+            if (listOfSelectedUnits.IndexOf(trueSelectedUnit) < listOfSelectedUnits.Count - 1) //if the current true selected unit is not the last in the list of selected units
+                TrueSelectUnit(listOfSelectedUnits[listOfSelectedUnits.IndexOf(trueSelectedUnit) + 1]); //set the new true selected unit to the next unit in the list
+            else //if the current true selected unit is the last in the list of selected units
+                TrueSelectUnit(listOfSelectedUnits[0]); //set the new selected unit to the first in the list
+        }
+
+        for (var i = 0; i < listOfSelectedUnits.Count; i++)
+        {
+            listOfSelectedUnits[i].SetTrueSelected(); //refresh ability slots and select indicator
+        }
+        
     }
 
 

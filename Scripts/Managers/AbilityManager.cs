@@ -24,10 +24,13 @@ public class AbilityManager : MonoBehaviour {
 
     }
 
-    public List<BaseAbility> abilityList = new List<BaseAbility>();
+    public List<BaseAbility> warriorAbilityList = new List<BaseAbility>();
+    public List<BaseAbility> wizardAbilityList = new List<BaseAbility>();
+    public List<BaseAbility> healerAbilityList = new List<BaseAbility>();
+    public List<BaseAbility> rogueAbilityList = new List<BaseAbility>();
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 	
 	}
 	

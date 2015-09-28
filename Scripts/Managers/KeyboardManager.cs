@@ -48,5 +48,11 @@ public class KeyboardManager : MonoBehaviour
         if (Input.GetButtonDown("ShiftModifier")) shiftModifier = true;
         if (Input.GetButtonUp("ShiftModifier")) shiftModifier = false;
 
+
+        if (Input.GetButtonUp("TabTarget"))
+        {
+            Debug.Log("tab pressed");
+            gameManager.TabTrueSelected();
+        }
     }
 }

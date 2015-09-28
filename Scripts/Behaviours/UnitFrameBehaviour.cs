@@ -10,16 +10,18 @@ public class UnitFrameBehaviour : MonoBehaviour, IPointerDownHandler
     UnitBehaviour linkedUnit; //the unit "linked" to this unit frame, whose attributes we use
 
     public GameObject selectionOutline; //this is set in the inspector
+    public GameObject trueSelectionOutline; //this is set in the inspector
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
-        if (selectionOutline == null)
+        if (selectionOutline == null || trueSelectionOutline == null )
         {
             Debug.LogError("selection outline of unitFrameBehaviour needs to be set in inspector");
         }
+
 	}
 	
 	// Update is called once per frame
@@ -27,13 +29,22 @@ public class UnitFrameBehaviour : MonoBehaviour, IPointerDownHandler
     {
         if (selectionOutline != null)
         {
-            if (selectionOutline.activeInHierarchy == false && linkedUnit.GetSelected())
+            if (!selectionOutline.activeInHierarchy && linkedUnit.GetSelected())
             {
-                selectionOutline.SetActive(true);
+                selectionOutline.SetActive(true); //hide if unit is selected and outline is hidden
             }
-            if (selectionOutline.activeInHierarchy == true && !linkedUnit.GetSelected())
+            if (selectionOutline.activeInHierarchy && !linkedUnit.GetSelected())
             {
-                selectionOutline.SetActive(false);
+                selectionOutline.SetActive(false); //hide if unit is not selected and outline is not hidden
+            }
+
+            if (!trueSelectionOutline.activeInHierarchy && linkedUnit.GetTrueSelected())
+            {
+                trueSelectionOutline.SetActive(true); //hide if unit is selected and outline is hidden
+            }
+            if (trueSelectionOutline.activeInHierarchy && !linkedUnit.GetTrueSelected())
+            {
+                trueSelectionOutline.SetActive(false); //hide if unit is not selected and outline is not hidden
             }
         }
     }

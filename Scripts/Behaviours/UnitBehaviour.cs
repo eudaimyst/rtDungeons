@@ -19,6 +19,9 @@ public class UnitBehaviour : MonoBehaviour {
     public enum UnitTypeEnum { friendly, enemy };
     public UnitTypeEnum unitType;
 
+    public enum UnitClassEnum { warrior, wizard, healer, rogue };
+    public UnitClassEnum unitClass;
+
     public class Attributes
     {
         public string name;
@@ -51,10 +54,12 @@ public class UnitBehaviour : MonoBehaviour {
     public Attributes attributes = new Attributes();
 
     public AbilityManager.BaseAbility[] abilities = new AbilityManager.BaseAbility[6];
+    public bool[] abilityAutocasting = new bool[6];
 
     public int ID; //ID is the position of the unit in gameManagers List of All units.
 
     public List<GameObject> moveOrderList = new List<GameObject>();
+
 
     // Use this for initialization
     void Start ()
@@ -71,9 +76,21 @@ public class UnitBehaviour : MonoBehaviour {
         attributes.RollStats();
         Debug.Log("attributes rolled, health: " + attributes.health);
 
-        for (var i = 0; i < 6; i++)
+
+        List<AbilityManager.BaseAbility> abilityList = new List<AbilityManager.BaseAbility>(); //temp variable to store ability list depending on unit class
+        gameManager.abilityManager = gameManager.GetComponent<AbilityManager>(); //setting this here because if unit exists at start of level it can access abilityManager (which will be null) before gameManager's start function
+        if (unitClass == UnitClassEnum.warrior) abilityList = gameManager.abilityManager.warriorAbilityList;
+        else if (unitClass == UnitClassEnum.wizard) abilityList = gameManager.abilityManager.wizardAbilityList;
+        else if (unitClass == UnitClassEnum.healer) abilityList = gameManager.abilityManager.healerAbilityList;
+        else if (unitClass == UnitClassEnum.rogue) abilityList = gameManager.abilityManager.rogueAbilityList;
+        
+        for (var i = 0; i < 6; i++) //set each ability for this unit to the ability in the ability list
         {
-            abilities[i] = gameManager.abilityManager.abilityList[0];
+            if (i < abilityList.Count) //if the ability exists in the list
+            {
+                abilities[i] = abilityList[i];
+                abilityAutocasting[i] = false;
+            }
         }
 	}
 	
@@ -93,7 +110,7 @@ public class UnitBehaviour : MonoBehaviour {
         {
             transform.LookAt(moveOrderList[0].transform, Vector3.up); //look at most first move order (if many are queued)
 
-            transform.position = Vector3.MoveTowards(transform.position, moveOrderList[0].transform.position, Time.deltaTime * 1); //move towards
+            transform.position = Vector3.MoveTowards(transform.position, moveOrderList[0].transform.position, Time.deltaTime * 2); //move towards
 
             if (transform.position == moveOrderList[0].transform.position)
             {
@@ -105,20 +122,28 @@ public class UnitBehaviour : MonoBehaviour {
 
     public void SetSelected(bool b)
     {
+        RefreshSelectIndicator();
         Debug.Log("setting " + this.name + " selected " + b);
         isSelected = b;
     }
 
-    public void SetTrueSelected(bool b)
+    public void SetTrueSelected()
     {
-        Debug.Log("setting " + this.name + " trueSelected " + b);
-        //isTrueSelected = b; commenting out because we can just check against gameManager
-        if (b)
+        RefreshSelectIndicator();
+        gameManager.interfaceManager.RefreshAbilitySlots();
+    }
+
+    void RefreshSelectIndicator()
+    {
+        if (gameManager.trueSelectedUnit == this)
         {
             unitSelectIndicator.GetComponent<MeshRenderer>().material.color = Color.yellow;
-        } else
+            Debug.Log("<<<<<<<<<<YELLOW INDICATOr>>>>>>>>>>>>");
+        }
+        else
         {
             unitSelectIndicator.GetComponent<MeshRenderer>().material.color = Color.white;
+            Debug.Log("<<<<<<<<<<WHITE INDICATOr>>>>>>>>>>>>");
         }
     }
 
@@ -126,6 +151,19 @@ public class UnitBehaviour : MonoBehaviour {
     {
         return isSelected;
     }
+
+    public bool GetTrueSelected()
+    {
+        if (gameManager.trueSelectedUnit == this)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 
     public void onCollisionEnter(Collision col)
     {

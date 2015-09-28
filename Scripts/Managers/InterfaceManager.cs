@@ -59,6 +59,14 @@ public class InterfaceManager : MonoBehaviour {
         }
     }
 
+    public void RefreshAbilitySlots() //call this to force the graphics / status of the ability slots to refresh
+    {
+        for (var i = 0; i < 6; i++)
+        {
+            abilitySlots[i].ForceRefresh();
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -299,7 +307,7 @@ public class InterfaceManager : MonoBehaviour {
                 }
             }
 
-            if (selected)
+            if (selected) //if there is an object in the selection box
             {
                 if (!gameManager.keyboardManager.altModifier) //if alt isn't pressed
                 {
