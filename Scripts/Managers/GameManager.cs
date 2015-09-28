@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour {
     public void TrueSelectUnit(UnitBehaviour unit)
     {
         trueSelectedUnit = unit;
-        Debug.Log("setting trueSelectedUnit");
+        //Debug.Log("setting trueSelectedUnit");
         unit.SetTrueSelected(); //refresh ability slots and select indicator
     }
 
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour {
 
     public void TabTrueSelected() //set the true selected unit to be the "next" selected unit out of the currently selected units
     {
-        Debug.Log("tab true select");
+        //Debug.Log("tab true select");
 
         if (listOfSelectedUnits.Count == 0)
         {

@@ -51,7 +51,7 @@ public class KeyboardManager : MonoBehaviour
 
         if (Input.GetButtonUp("TabTarget"))
         {
-            Debug.Log("tab pressed");
+            //Debug.Log("tab pressed");
             gameManager.TabTrueSelected();
         }
     }

@@ -14,6 +14,17 @@ public class InterfaceManager : MonoBehaviour {
     public UnitFrameBehaviour unitFrame; //set in inspector, this is the unit frame game object to spawn
     public AbilitySlotBehaviour abilitySlot; //set in inspector, this is the unit frame game object to spawn
 
+    public GameObject selectedUnitFrameParent; //set in inspector, this is the selected unit frame game object, does not get spawned, already exists within GameCanvas
+    public GameObject selectedUnitFrameHealthbarObject;
+    public GameObject selectedUnitFramePowerbarObject;
+    public GameObject selectedUnitFrameTextObject;
+    [HideInInspector]
+    public Image selectedUnitFrameHealthbar;
+    [HideInInspector]
+    public Image selectedUnitFramePowerbar;
+    [HideInInspector]
+    public Text selectedUnitFrameText;
+
     [HideInInspector]
     public AbilitySlotBehaviour[] abilitySlots = new AbilitySlotBehaviour[6];
 
@@ -25,6 +36,14 @@ public class InterfaceManager : MonoBehaviour {
         selectionBox = GameObject.Find("SelectionBox");
         selectionBox.SetActive(false);
         selectionBoxRect = selectionBox.GetComponent<RectTransform>();
+
+        if (selectedUnitFrameParent == null || selectedUnitFrameHealthbarObject == null || selectedUnitFramePowerbarObject == null || selectedUnitFrameTextObject == null) Debug.LogError("a selectedUnitFrame object is not set in inspector");
+        else
+        {
+            selectedUnitFrameHealthbar = selectedUnitFrameHealthbarObject.GetComponent<Image>();
+            selectedUnitFramePowerbar = selectedUnitFramePowerbarObject.GetComponent<Image>();
+            selectedUnitFrameText = selectedUnitFrameTextObject.GetComponent<Text>();
+        }
 
         fpsText = GameObject.Find("FPSValue").GetComponent<Text>();
 
@@ -65,6 +84,7 @@ public class InterfaceManager : MonoBehaviour {
         {
             abilitySlots[i].ForceRefresh();
         }
+        UpdateTrueSelectedUnitFrame();
     }
 
     // Update is called once per frame
@@ -76,6 +96,22 @@ public class InterfaceManager : MonoBehaviour {
         {
             UpdateSelectionBox();
         }
+
+        if (gameManager.trueSelectedUnit != null && !selectedUnitFrameParent.activeInHierarchy)
+        {
+            selectedUnitFrameParent.SetActive(true);
+            UpdateTrueSelectedUnitFrame();
+        }
+        if (gameManager.trueSelectedUnit == null && selectedUnitFrameParent.activeInHierarchy)
+        {
+            selectedUnitFrameParent.SetActive(false);
+        }
+    }
+
+    void UpdateTrueSelectedUnitFrame()
+    {
+        //update the text
+        selectedUnitFrameText.text = gameManager.trueSelectedUnit.attributes.name + " the " + gameManager.trueSelectedUnit.unitClass.ToString().Remove(1).ToUpper() + gameManager.trueSelectedUnit.unitClass.ToString().Remove(0, 1);
     }
 
     // FPS Calculation variables
@@ -124,6 +160,7 @@ public class InterfaceManager : MonoBehaviour {
     {
         selectEndLocation = gameManager.mouseManager.mouseScreenPosition;
         selectionBox.SetActive(false);
+        selectionStarted = false;
 
         if (selectStartLocation == selectEndLocation) PointSelect(); 
         else BoxSelect(selectStartLocation, selectEndLocation);
@@ -247,6 +284,7 @@ public class InterfaceManager : MonoBehaviour {
     
     void BoxSelect(Vector2 startPosition, Vector2 endPosition)
     {
+        Debug.Log("doing box select");
         //loop though each friendly unit and see if it's within the selectpoints
         for (var i = 0; i < gameManager.listOfFriendlyUnits.Count; i++)
         {

@@ -123,7 +123,7 @@ public class UnitBehaviour : MonoBehaviour {
     public void SetSelected(bool b)
     {
         RefreshSelectIndicator();
-        Debug.Log("setting " + this.name + " selected " + b);
+        //Debug.Log("setting " + this.name + " selected " + b);
         isSelected = b;
     }
 
@@ -138,12 +138,12 @@ public class UnitBehaviour : MonoBehaviour {
         if (gameManager.trueSelectedUnit == this)
         {
             unitSelectIndicator.GetComponent<MeshRenderer>().material.color = Color.yellow;
-            Debug.Log("<<<<<<<<<<YELLOW INDICATOr>>>>>>>>>>>>");
+            //Debug.Log("<<<<<<<<<<YELLOW INDICATOr>>>>>>>>>>>>");
         }
         else
         {
             unitSelectIndicator.GetComponent<MeshRenderer>().material.color = Color.white;
-            Debug.Log("<<<<<<<<<<WHITE INDICATOr>>>>>>>>>>>>");
+            //Debug.Log("<<<<<<<<<<WHITE INDICATOr>>>>>>>>>>>>");
         }
     }
 

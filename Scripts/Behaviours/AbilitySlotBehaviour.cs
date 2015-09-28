@@ -37,7 +37,7 @@ public class AbilitySlotBehaviour : MonoBehaviour, IPointerDownHandler
         if (gameManager.trueSelectedUnit != null && !abilitySlotParentObject.activeInHierarchy)
         {
             //set ability icon
-            Debug.Log("should be setting ability icon");
+            //Debug.Log("should be setting ability icon");
             abilityIcon.sprite = gameManager.trueSelectedUnit.abilities[index].abilityIcon;
 
             //if can autocast show autocast border
