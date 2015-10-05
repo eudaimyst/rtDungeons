@@ -11,6 +11,8 @@ public class InterfaceManager : MonoBehaviour {
 
     GameManager gameManager;
 
+    public Canvas gameCanvas; //set in inspector, the main game canvas within the interface parent object
+
     public UnitFrameBehaviour unitFrame; //set in inspector, this is the unit frame game object to spawn
     public AbilitySlotBehaviour abilitySlot; //set in inspector, this is the unit frame game object to spawn
 
@@ -293,14 +295,19 @@ public class InterfaceManager : MonoBehaviour {
 
             bool selected = false; //just a temp bool used to determine if the unit is within the box
 
-            Debug.Log("unit at " + unitPosition + " boxStart " + startPosition + " boxEnd " + endPosition + " not in selection box");
+
 
             if (unitPosition.x > startPosition.x && unitPosition.x < endPosition.x)
             {
                 if (unitPosition.y > startPosition.y && unitPosition.y < endPosition.y) //if unit were up to in the list is in the selection box
                 {
                     selected = true;
-                    
+                    Debug.Log("unit at " + unitPosition + " boxStart " + startPosition + " boxEnd " + endPosition + " in selection box");
+
+                }
+                else
+                {
+                    Debug.Log("unit at " + unitPosition + " boxStart " + startPosition + " boxEnd " + endPosition + " not in selection box");
                 }
             }
         
@@ -325,64 +332,7 @@ public class InterfaceManager : MonoBehaviour {
                 }
             }
 
-        /* commenting out this crap, start/end should always be the same order (getting it from the selection box position/dimensions)
-        if (selectionBoxOffSet.x < 0 || selectionBoxOffSet.y < 0) //use the variables from drawing the box to determine if box is inverted
-        {
-            Debug.Log("one or both of the selection axis is inverted");
-            if (selectionBoxOffSet.x < 0 && selectionBoxOffSet.y == 0)
-            {
-                Debug.Log("horizontal selection inverted");
-                if (unitPosition.x < startPosition.x && unitPosition.x > endPosition.x)
-                {
-                    if (unitPosition.y > startPosition.y && unitPosition.y < endPosition.y)
-                    {
-                        //Debug.Log("unit at " + unitPosition + " is between start at " + startPosition + " and end at " + endPosition);
-                        selected = true;
-                    }
-                }
-            }
-            if (selectionBoxOffSet.x == 0 && selectionBoxOffSet.y < 0)
-            {
-                Debug.Log("vertical selection inverted");
-                if (unitPosition.x > startPosition.x && unitPosition.x < endPosition.x)
-                {
-                    if (unitPosition.y < startPosition.y && unitPosition.y > endPosition.y)
-                    {
-                        //Debug.Log("unit at " + unitPosition + " is between start at " + startPosition + " and end at " + endPosition);
-                        selected = true;
-                    }
-                }
-            }
-            if (selectionBoxOffSet.x < 0 && selectionBoxOffSet.y < 0)
-            {
-                Debug.Log("horizontal and vertical selection inverted");
-                if (unitPosition.x < startPosition.x && unitPosition.x > endPosition.x)
-                {
-                    if (unitPosition.y < startPosition.y && unitPosition.y > endPosition.y)
-                    {
-                        //Debug.Log("unit at " + unitPosition + " is between start at " + startPosition + " and end at " + endPosition);
-                        selected = true;
-                    }
-                }
-            }
         }
-        else //there is no inversion of the selection points, do normal logic
-        {
-            Debug.Log("regular selection");
-            if (unitPosition.x > startPosition.x && unitPosition.x < endPosition.x)
-            {
-                if (unitPosition.y > startPosition.y && unitPosition.y < endPosition.y)
-                {
-                    //Debug.Log("unit at " + unitPosition + " is between start at " + startPosition + " and end at " + endPosition);
-                    Debug.Log("selection true");
-                    selected = true;
-                }
-            }
-        }
-        */
-
-
-    }
 
     }
 

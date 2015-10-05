@@ -29,10 +29,19 @@ public class MouseManager : MonoBehaviour {
         mouseScreenPositionDelta = mouseScreenPosition - mouseScreenPositionOld;
 
         CheckPosition(); //for now we are doing our camera movement checking in this function
-        
-        //TODO: cast a ray from the camera to the ground plane and store the position of the mouse in world co-ordinates
-        
-	}
+
+        if (Input.GetAxis("CameraZoom") > 0)
+        {
+            gameManager.cameraManager.ZoomCamera(true);
+            //Debug.Log("camera zoom in");
+        }
+        else if (Input.GetAxis("CameraZoom") < 0)
+        {
+            gameManager.cameraManager.ZoomCamera(false);
+            //Debug.Log("camera zoom out");
+        }
+
+    }
 
     void CheckPosition()
     {

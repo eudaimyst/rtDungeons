@@ -24,6 +24,9 @@ public class CameraManager : MonoBehaviour
     GameObject cameraRotationDummy;
     Vector3 cameraRotationPoint; //get point from rotation game object to rotate around
 
+    GameObject cameraLookDummy;
+    Vector3 CameraLookPoint; //get point from look game object to face towards
+
     // Use this for initialization
     void Start()
     {
@@ -35,6 +38,10 @@ public class CameraManager : MonoBehaviour
 
         cameraRotationDummy = GameObject.Find("CameraRotationPoint");
         cameraRotationPoint = cameraRotationDummy.transform.position;
+
+        cameraLookDummy = GameObject.Find("CameraLookPoint");
+
+        gameCameraObject.transform.LookAt(cameraLookDummy.transform);
     }
 
     // Update is called once per frame
@@ -53,12 +60,27 @@ public class CameraManager : MonoBehaviour
         doRotation = b;
     }
 
+    public void ZoomCamera(bool zoomIn) //called by mouse manager on scroll wheel
+    {
+        if (zoomIn)
+        {
+            gameCamera.fieldOfView -= 1f;
+        }
+        else
+        {
+            gameCamera.fieldOfView += 1f;
+        }
+    }
+
     void RotateCamera()
     {
         if (doRotation == true)
         {
             cameraRotationPoint = cameraRotationDummy.transform.position;
-            gameCameraParent.transform.RotateAround(cameraRotationPoint, Vector3.up, gameManager.mouseManager.mouseScreenPositionDelta.x * 20 * Time.deltaTime);
+            gameCameraParent.transform.RotateAround(cameraLookDummy.transform.position, Vector3.up, gameManager.mouseManager.mouseScreenPositionDelta.x * 20 * Time.deltaTime);
+            gameCameraObject.transform.RotateAround(cameraLookDummy.transform.position, gameCameraObject.transform.right, -gameManager.mouseManager.mouseScreenPositionDelta.y * 20 * Time.deltaTime);
+
+            gameCameraObject.transform.LookAt(cameraLookDummy.transform);
         }
     }
 
