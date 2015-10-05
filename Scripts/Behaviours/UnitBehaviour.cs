@@ -22,6 +22,8 @@ public class UnitBehaviour : MonoBehaviour {
     public enum UnitClassEnum { warrior, wizard, healer, rogue };
     public UnitClassEnum unitClass;
 
+    public Animator animatorComponent; //set in inspector
+
     public class Attributes
     {
         public string name;
@@ -96,6 +98,18 @@ public class UnitBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        //here we will test accessing animations by code
+        /*
+        if (animatorComponent != null)
+        {
+            if (moveOrderList.Count > 0)
+                animatorComponent.Play("Walking");
+            else
+                animatorComponent.Play("Default");
+        }
+        */
+
         //show/hide the select indicator
         if (isSelected && !unitSelectIndicator.activeInHierarchy)
         {

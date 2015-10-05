@@ -177,7 +177,9 @@ public class InterfaceManager : MonoBehaviour {
             RaycastHit r; //the output of the raycast
             GameObject hitObject;
 
-            if (Physics.Raycast(gameManager.cameraManager.gameCamera.ScreenPointToRay(gameManager.mouseManager.mouseScreenPosition), out r)) //cast a ray
+            var groundLayer = (1 << LayerMask.NameToLayer("Ground"));
+
+            if (Physics.Raycast(gameManager.cameraManager.gameCamera.ScreenPointToRay(gameManager.mouseManager.mouseScreenPosition), out r, Mathf.Infinity, groundLayer)) //cast a ray
             {
                 hitObject = r.collider.gameObject;
                 Debug.Log("RaycastHit hit something with name: " + hitObject.name + " at world position " + r.point);
